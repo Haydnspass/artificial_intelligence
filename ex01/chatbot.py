@@ -32,7 +32,7 @@ class Chatbot():
                 farewells:      list of strings - predefines how the bot can say goodbye
         
         '''
-        self.reaction = reaction#function 
+        self.reaction = reaction #function
         self.greetings = greetings
         self.questions = questions
         self.questions_user = questions_user
@@ -41,7 +41,7 @@ class Chatbot():
         #during the conversation the bot has to ask all questions
         #question index is removed in askQuestion() if question was asked
         self.notAsked = list(range(0,len(questions)))
-        self.shownGauss = 1#boolean - has to be changed to 0 for Question 1c
+        self.shownGauss = 0#boolean - has to be changed to 0 for Question 1c
 
     
     def greeting(self):
@@ -59,8 +59,11 @@ class Chatbot():
 
         selectedGreeting = self.greetings[random.randint(0,self.greetings.__len__()-1)]
         print(selectedGreeting)
-        self.username = raw_input("Whats ur name?")
-        print('Nice to meet u ' + self.username)
+        answeredName = raw_input("Whats ur name?")
+        print('Nice to meet u!')
+        if self.isQuestion(user_input=answeredName):
+            splittedAnswer = self.extractParts(user_input=answeredName,delimiter='.')
+            self.answerQuestion(user_input=splittedAnswer[1])
 
         
     def askQuestion(self):
@@ -83,10 +86,15 @@ class Chatbot():
         If yes, he has to answer them. For extracting the different parts of the users input (in case
         he asked a question) you can use self.extractParts(user_input,delimiter)
         '''
-        #COMPLETE
         selectedQuestion = random.choice(self.notAsked)
-        answer = raw_input(self.questions[selectedQuestion])
         self.notAsked.remove(selectedQuestion)
+        answer = raw_input(self.questions[selectedQuestion])
+        if self.isQuestion(user_input=answer):
+            splittedAnswer = self.extractParts(user_input=answer, delimiter='.')
+            reaction(self, self.questions[selectedQuestion], splittedAnswer[0])
+            self.answerQuestion(user_input=splittedAnswer[1])
+        else:
+            reaction(self, self.questions[selectedQuestion], answer)
 
         
     def farewell(self):
@@ -94,7 +102,7 @@ class Chatbot():
         Question 1a)
         The bot outputs randomly a farewell given all possible greetings in self.farewells
         '''
-        #COMPLETE
+        print(random.choice(self.farewells))
                                  
     def extractParts(self,user_input,delimiter,outputType = str):
         '''
@@ -125,11 +133,16 @@ class Chatbot():
         Output: answers: all answers to the questions made from the user in his/her current input
     
         '''
-        answers = []
-        
-        #COMPLETE
-        
-        return answers
+
+        questionIsAnswered = False
+        for j in range(len(self.questions_user)):
+            if user_input == self.questions_user[j]:
+                print(self.answers[j])
+                questionIsAnswered = True
+        if not questionIsAnswered:
+            print('Err: Uncaught question.')
+
+
     
     
     
@@ -142,9 +155,9 @@ class Chatbot():
         '''
 
         if user_input[-1] == '?':
-            return true
+            return True
         else:
-            return false
+            return False
 
     def input():
         pass
@@ -173,7 +186,8 @@ class Chatbot():
             x = np.linspace(-3,3,1000)
             for i in range(stds.__len__()):
                 y = norm.pdf(x, loc = mean, scale = stds[i])
-                plot(x,y)
+                plt.plot(x,y)
+                plt.show()
             
         elif user_input.lower()=='no':
             print("Oh... ok.")
@@ -189,13 +203,13 @@ class Chatbot():
         '''
 
         self.greeting()
-        loopNum = 0
-        while not len(self.notAsked) == 0 and loopNum < 5:#ask questions until all questions are asked
+        while not len(self.notAsked) == 0:#ask questions until all questions are asked
             self.askQuestion()
             if not self.shownGauss:#plot Gauss if it hasn't been done already
                 prob = 1 if len(self.notAsked)==0 else random.randint(0,1)#plot with probability of 50% or 100% if last question was asked
                 if prob: self.plotGauss()
-            loopNum = loopNum + 1
+
+
         self.farewell()
 
 
@@ -210,29 +224,34 @@ if __name__ == "__main__":
     def reaction(bot,question,answer):
         '''
         Question 1a)
-        Determines the reaction of the chatbot to an answer given by the user after the bot asked a question
+        Determines the reaction of an instance of a chatbot to an answer given by the user after the bot asked a question
         Input:
             bot:        Object of the class Chatbot
             question:   string - containing the question the bot asked
             answer:     string - containing the answer of the user to the question of the bot
         Output: nothing - the output/reaction should be printed in the console
         '''
-        #COMPLETE
+        if not question.find('Trump') == -1:
+            print(answer + ', as well.')
+        if not question.find('hobbies') == -1:
+            partsAnswer = bot.extractParts(user_input=answer, delimiter=',')
+            print('Oh, that is so cool. I like ' +
+                  ' '.join([partsAnswer[i] for i in range(partsAnswer.__len__())]) + ' as well')
+        if not question.find('instrument') == -1:
+            print('Cool. Listening to music is great.')
 
 
     # To use the python 3 function input while pretending to use raw_input
     raw_input = input
-    # # log output
-    # f = open("test.out", 'w')
-    # sys.stdout = f
     
-    bot = Chatbot(greetings = ['Hey dude!','Hi boy!', 'Hi, wanna play?'],
-              questions = ['What r ur hobbies?','What r ur tribes?','Whats ur best position'],
+    bot = Chatbot(greetings = ['Hey dude!','Hi boy!', 'Hello!'],
+              questions = ['What r ur hobbies?','What instrument do u play?',
+                           'What do u think of Donald Trump? (start with I think)'],
               reaction = reaction,
-              questions_user = ['','',''],
-              answers =  ['','','' ],
-              farewells = ['','',''])
+              questions_user = ['What is ur name?','Is this a private conversation?',
+                                'Will the exercises be updated to Python 3?'],
+              answers =  ['My name is Bob the bot.','I hope so, but do not send me nudes man.','I do not think, but I hope so.'],
+              farewells = ['See u','Bye','Bb'])
     bot.main()
 
-    # close logfile
-    # f.close()
+
