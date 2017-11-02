@@ -41,7 +41,7 @@ class Chatbot():
         #during the conversation the bot has to ask all questions
         #question index is removed in askQuestion() if question was asked
         self.notAsked = list(range(0,len(questions)))
-        self.shownGauss = 0#boolean - has to be changed to 0 for Question 1c
+        self.shownGauss = 0 #boolean - has to be changed to 0 for Question 1c
 
     
     def greeting(self):
