@@ -184,10 +184,25 @@ class Chatbot():
             stds = self.extractParts(user_input,',',outputType=float)
             
             x = np.linspace(-3,3,1000)
-            for i in range(stds.__len__()):
-                y = norm.pdf(x, loc = mean, scale = stds[i])
-                plt.plot(x,y)
-                plt.show()
+            fig_w = 10
+            golden_ratio = 1.6180
+            fig_h = 10 / golden_ratio
+            fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(fig_w, fig_h))
+
+            ax0.set_title('First plot with std: ' + str(stds[0]))
+            ax0.plot(x, norm.pdf(x, loc = mean, scale = stds[0]))
+            ax0.set_xlabel('x')
+            ax1.set_ylabel('y')
+
+            # Demo of the options `places` (number of digit after decimal point) and
+            # `sep` (separator between the number and the prefix/unit).
+            ax1.set_title('Second plot with std: ' + str(stds[1]))
+            ax1.plot(x, norm.pdf(x, loc = mean, scale = stds[1]))
+            ax1.set_xlabel('x')
+            ax1.set_ylabel('y')
+
+            plt.tight_layout()
+            plt.show()
             
         elif user_input.lower()=='no':
             print("Oh... ok.")

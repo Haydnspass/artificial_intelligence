@@ -33,7 +33,7 @@ language = bash,
 }
 
 % Please change the following accordingly...
-\centerline{\LARGE \textbf{Artificial Intelligence - Exercise 1}}\vspace{0.5em}
+\centerline{\LARGE \textbf{Artificial Intelligence - Exercise Sheet 1}}\vspace{0.5em}
 \centerline{\large by Lucas-Raphael Müller}\vspace{2em}
 
 \section*{Exercise 1}
@@ -92,15 +92,9 @@ Process finished with exit code 0
 
 \begin{figure}[btp]
 	\centering
-	\includegraphics[width=.8\textwidth]{figures/gauss1.png}
+	\includegraphics[width=.8\textwidth]{figures/gauss.png}
 	% \caption{$jkl$ }
 	\label{gauss1}
-\end{figure}
-\begin{figure}[btp]
-	\centering
-	\includegraphics[width=.8\textwidth]{figures/gauss2.png}
-	% \caption{$jkl$ }
-	\label{gauss2}
 \end{figure}
 
 \section*{Exercise 2}
@@ -108,9 +102,14 @@ Process finished with exit code 0
 \paragraph{Performance Measure} in the present case would be a fluent, human understandable, helpful and fast bot.
 \paragraph{Environment} is the application where the bot is being used. This could be in a Facebook chat, an audio \textit{chat}bot or via email.
 \paragraph{Actuators} language output, via text on a screen in a chat or via audio.
-\paragraph{Sensors} are text inputs via chat, console or voice recognition software.\\
+\paragraph{Sensors} are text inputs via chat, console or voice recognition software.\vspace{20pt} \\
 (b) The environment is most probably fully observable (i.e. no loss of information on technical side); not deterministic because not only the bot can influence the next state of environment (human interaction); the environment is most probably static because a well performing bot should be fast (orders of ms).
-The environment is not discrete, since a great amount of possible inputs are possible; probably single-agent.
+The environment is not discrete, since a great amount of possible inputs are possible; probably single-agent.\\
+(c) Many business sites on facebook offer chatbots. Mostly they ask easy questions which are answerable with yes / no or with a number (for example budget).
+One example is SnapTravel.
+Another funny example is \url{http://thebot.de/about_brain.html} which allows for interactive and open conversation.\\
+(d) Our example from question 1 is a simple reflex agent, since the bot has some intelligence to determine the current state (i.e. is the current state an open question or not).
+However condition-action-rules are table-lookups or very generic answers.
 
 
 
