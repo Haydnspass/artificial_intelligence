@@ -20,6 +20,16 @@ def create_romania_graph():
                  (19, 20, {'weight': 80}), (18, 10, {'weight': 211}), (20, 8, {'weight': 146}), (20, 9, {'weight': 97})]
     G.add_edges_from(edge_list)
 
+    
+    G.node[3]['name'] = 'Arad'
+    G.node[4]['name'] = 'Timisoara'
+    G.node[9]['name'] = 'Pitesti'
+    G.node[10]['name'] = 'Buchareset'
+    G.node[19]['name'] = 'Sibiu'
+    G.node[20]['name'] = 'Rimnicu Vilcea'
+
+
+
     return G
 
 
@@ -30,29 +40,27 @@ def plot_graph(graph):
 
 def uniform_cost_search(graph, root, goal):
     frontier = PriorityQueue()
-    frontier.put((0, root))
+    frontier.put((0, root, [root]))
     explored = set()
 
-    found_optimal_path = False
-    while not found_optimal_path:
-        cost, node = frontier.get()
-        # try:
-        #     if frontier.empty():
-        #         raise Exception('Empty Frontier')
-        # except NameError:
-        #     print('Exception!')
-        #     raise
+    while True:
+        try:
+            if frontier.empty():
+                raise Exception('Empty Frontier')
+        except NameError:
+            print('Exception!')
+            raise
+        cost, node, path = frontier.get()
+
         if node not in explored:
             explored.add(node)
 
             if node == goal:
-                return
+                return cost, path
             for i in graph.neighbors(node):
                 if i not in explored:
                     cost_to_i = cost + graph.get_edge_data(node, i)['weight']
-                    frontier.put((cost_to_i, i))
-
-    # return path
+                    frontier.put((cost_to_i, i, path + [i]))
 
 
 if __name__ == '__main__':
@@ -60,5 +68,6 @@ if __name__ == '__main__':
     start_node = 4  # 'Timisoara'
     end_node = 10  # 'Bucharest'
 
-    uniform_cost_search(G, start_node, end_node)
+    total_cost, path = uniform_cost_search(G, start_node, end_node)
+    print("Total pathlength was: " + str(total_cost) + "km, using the path: " + str([G.node[i]['name'] for i in path]))
     # plot_graph(G)
