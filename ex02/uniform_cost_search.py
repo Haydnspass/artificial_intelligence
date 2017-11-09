@@ -20,15 +20,26 @@ def create_romania_graph():
                  (19, 20, {'weight': 80}), (18, 10, {'weight': 211}), (20, 8, {'weight': 146}), (20, 9, {'weight': 97})]
     G.add_edges_from(edge_list)
 
-
+    G.node[1]['name'] = 'Oradea'
+    G.node[2]['name'] = 'Zerind'
     G.node[3]['name'] = 'Arad'
     G.node[4]['name'] = 'Timisoara'
+    G.node[5]['name'] = 'Lugoj'
+    G.node[6]['name'] = 'Mehadia'
+    G.node[7]['name'] = 'Drobeta'
+    G.node[8]['name'] = 'Craiova'
     G.node[9]['name'] = 'Pitesti'
     G.node[10]['name'] = 'Buchareset'
+    G.node[11]['name'] = 'Giurgiu'
+    G.node[12]['name'] = 'Urziceni'
+    G.node[13]['name'] = 'Hirsova'
+    G.node[14]['name'] = 'Eforie'
+    G.node[15]['name'] = 'Vaslui'
+    G.node[16]['name'] = 'Iasi'
+    G.node[17]['name'] = 'Neamt'
+    G.node[18]['name'] = 'Fagaras'
     G.node[19]['name'] = 'Sibiu'
     G.node[20]['name'] = 'Rimnicu Vilcea'
-
-
 
     return G
 
@@ -37,9 +48,12 @@ def plot_graph(graph, highlighted_nodes=[]):
     node_colors = ["green" if n in highlighted_nodes else "red" for n in graph.nodes()]
     labels = {k: G.node[k]['name'] for k in highlighted_nodes}
     pos = nx.spring_layout(G)
+
     nx.draw_networkx(graph, pos, node_color=node_colors)
     nx.draw_networkx_labels(G, pos, labels)
     plt.show()
+
+
 
 
 def uniform_cost_search(graph, root, goal):
@@ -65,12 +79,14 @@ def uniform_cost_search(graph, root, goal):
                 if i not in explored:
                     cost_to_i = cost + graph.get_edge_data(node, i)['weight']
                     frontier.put((cost_to_i, i, path + [i]))
+                    print("Current Node: " + graph.node[i]['name'] + "cost: " + str(cost_to_i) + '    path: ' +
+                          str([graph.node[j]['name'] for j in (path + [i])]))
 
 
 if __name__ == '__main__':
     G = create_romania_graph()
     start_node = 4  # 'Timisoara'
-    end_node = 10  # 'Bucharest'
+    end_node = 10   # 'Bucharest'
 
     total_cost, path = uniform_cost_search(G, start_node, end_node)
     print("Total pathlength was: " + str(total_cost) + "km, using the path: " + str([G.node[i]['name'] for i in path]))
