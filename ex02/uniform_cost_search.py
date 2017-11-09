@@ -20,7 +20,7 @@ def create_romania_graph():
                  (19, 20, {'weight': 80}), (18, 10, {'weight': 211}), (20, 8, {'weight': 146}), (20, 9, {'weight': 97})]
     G.add_edges_from(edge_list)
 
-    
+
     G.node[3]['name'] = 'Arad'
     G.node[4]['name'] = 'Timisoara'
     G.node[9]['name'] = 'Pitesti'
@@ -33,8 +33,12 @@ def create_romania_graph():
     return G
 
 
-def plot_graph(graph):
-    nx.draw(graph, with_labels=True, font_weight='bold')
+def plot_graph(graph, highlighted_nodes=[]):
+    node_colors = ["green" if n in highlighted_nodes else "red" for n in graph.nodes()]
+    labels = {k: G.node[k]['name'] for k in highlighted_nodes}
+    pos = nx.spring_layout(G)
+    nx.draw_networkx(graph, pos, node_color=node_colors)
+    nx.draw_networkx_labels(G, pos, labels)
     plt.show()
 
 
@@ -70,4 +74,4 @@ if __name__ == '__main__':
 
     total_cost, path = uniform_cost_search(G, start_node, end_node)
     print("Total pathlength was: " + str(total_cost) + "km, using the path: " + str([G.node[i]['name'] for i in path]))
-    # plot_graph(G)
+    plot_graph(G, path)
