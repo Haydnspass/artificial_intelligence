@@ -41,6 +41,29 @@ def create_romania_graph():
     G.node[19]['name'] = 'Sibiu'
     G.node[20]['name'] = 'Rimnicu Vilcea'
 
+    G.node[1]['sld'] = 380
+    G.node[2]['sld'] = 374
+    G.node[3]['sld'] = 366
+    G.node[4]['sld'] = 329
+    G.node[5]['sld'] = 244
+    G.node[6]['sld'] = 241
+    G.node[7]['sld'] = 242
+    G.node[8]['sld'] = 160
+    G.node[9]['sld'] = 100
+    G.node[10]['sld'] = 0
+    G.node[11]['sld'] = 77
+    G.node[12]['sld'] = 80
+    G.node[13]['sld'] = 151
+    G.node[14]['sld'] = 161
+    G.node[15]['sld'] = 199
+    G.node[16]['sld'] = 226
+    G.node[17]['sld'] = 234
+    G.node[18]['sld'] = 176
+    G.node[19]['sld'] = 253
+    G.node[20]['sld'] = 193
+
+
+
     return G
 
 
@@ -51,7 +74,7 @@ def plot_graph(graph, highlighted_nodes=[]):
 
     nx.draw_networkx(graph, pos, node_color=node_colors)
     nx.draw_networkx_labels(G, pos, labels)
-    plt.show()
+    # plt.show()
 
 
 
@@ -79,15 +102,55 @@ def uniform_cost_search(graph, root, goal):
                 if i not in explored:
                     cost_to_i = cost + graph.get_edge_data(node, i)['weight']
                     frontier.put((cost_to_i, i, path + [i]))
-                    print("Current Node: " + graph.node[i]['name'] + "cost: " + str(cost_to_i) + '    path: ' +
-                          str([graph.node[j]['name'] for j in (path + [i])]))
+                    # print("Current Node: " + graph.node[i]['name'] + "cost: " + str(cost_to_i) + '    path: ' +
+                    #       str([graph.node[j]['name'] for j in (path + [i])]))
 
+def greedy_best_first_search(graph, root, goal):
+    frontier = PriorityQueue()
+    # sld to goal
+    frontier.put((graph.node[root]['sld'], root, [root]))
+    # explored = set()
+
+    while True:
+        try:
+            if frontier.empty():
+                raise Exception('Empty Frontier')
+        except NameError:
+            print('Exception!')
+            raise
+        sld, node, path = frontier.get()
+        if node == goal:
+            return path
+
+        for i in graph.neighbors(node):
+            frontier.put((graph.node[i]['sld'], i, path + [i]))
+            # print("Current Node: " + graph.node[i]['name'] + "sld: " + str(sld) + '    path: ' +
+            #       str([graph.node[j]['name'] for j in (path + [i])]))
+
+def is_best_path(best_path, test_path):
+    if test_path == best_path:
+        return True
+    else:
+        print("Best path: " + str(best_path) + " Actual Path: " + str(test_path))
+        return False
+
+def test_equality(graph, end_node):
+    for start_node in graph:
+        _, path_u = uniform_cost_search(G, start_node, end_node)
+        path = greedy_best_first_search(G, start_node, end_node)
+        print("Current node: " + graph.node[start_node]['name'])
+        is_best_path(path_u, path)
 
 if __name__ == '__main__':
     G = create_romania_graph()
     start_node = 4  # 'Timisoara'
     end_node = 10   # 'Bucharest'
 
-    total_cost, path = uniform_cost_search(G, start_node, end_node)
-    print("Total pathlength was: " + str(total_cost) + "km, using the path: " + str([G.node[i]['name'] for i in path]))
+    total_cost, path_u = uniform_cost_search(G, start_node, end_node)
+    path = greedy_best_first_search(G, start_node, end_node)
+    print("path: " + str([G.node[i]['name'] for i in path]))
     plot_graph(G, path)
+    plt.savefig('figures/graph.pdf')
+    plt.close()
+
+    test_equality(G, end_node)
