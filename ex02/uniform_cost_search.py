@@ -12,58 +12,26 @@ import matplotlib.pyplot as plt
 
 def create_romania_graph():
     G = nx.Graph()
-    edge_list = [(1, 2, {'weight': 71}), (2, 3, {'weight': 75}), (3, 4, {'weight': 118}), (4, 5, {'weight': 111}),
+    edges = [(1, 2, {'weight': 71}), (2, 3, {'weight': 75}), (3, 4, {'weight': 118}), (4, 5, {'weight': 111}),
                  (5, 6, {'weight': 70}), (6, 7, {'weight': 75}), (7, 8, {'weight': 120}), (8, 9, {'weight': 138}),
                  (9, 10, {'weight': 101}), (10, 11, {'weight': 90}), (10, 12, {'weight': 85}), (12, 13, {'weight': 98}),
-                 (13, 14, {'weight': 86}), (12, 15, {'weight': 142}), (15, 16, {'weight': 92}), (16, 17, {'weight': 87}),
-                 (10, 18, {'weight': 211}), (18, 19, {'weight': 99}), (19, 1, {'weight': 151}), (3, 19, {'weight': 140}),
+                 (13, 14, {'weight': 86}), (12, 15, {'weight': 142}), (15, 16, {'weight': 92}),
+                 (16, 17, {'weight': 87}),
+                 (10, 18, {'weight': 211}), (18, 19, {'weight': 99}), (19, 1, {'weight': 151}),
+                 (3, 19, {'weight': 140}),
                  (19, 20, {'weight': 80}), (18, 10, {'weight': 211}), (20, 8, {'weight': 146}), (20, 9, {'weight': 97})]
-    G.add_edges_from(edge_list)
 
-    G.node[1]['name'] = 'Oradea'
-    G.node[2]['name'] = 'Zerind'
-    G.node[3]['name'] = 'Arad'
-    G.node[4]['name'] = 'Timisoara'
-    G.node[5]['name'] = 'Lugoj'
-    G.node[6]['name'] = 'Mehadia'
-    G.node[7]['name'] = 'Drobeta'
-    G.node[8]['name'] = 'Craiova'
-    G.node[9]['name'] = 'Pitesti'
-    G.node[10]['name'] = 'Buchareset'
-    G.node[11]['name'] = 'Giurgiu'
-    G.node[12]['name'] = 'Urziceni'
-    G.node[13]['name'] = 'Hirsova'
-    G.node[14]['name'] = 'Eforie'
-    G.node[15]['name'] = 'Vaslui'
-    G.node[16]['name'] = 'Iasi'
-    G.node[17]['name'] = 'Neamt'
-    G.node[18]['name'] = 'Fagaras'
-    G.node[19]['name'] = 'Sibiu'
-    G.node[20]['name'] = 'Rimnicu Vilcea'
+    nodes = [(1, {'name': 'Oradea', 'sld': 380}), (2, {'name': 'Zerind', 'sld': 374}), (3, {'name': 'Arad', 'sld': 366}),
+             (4, {'name': 'Timisoara', 'sld': 329}), (5, {'name': 'Lugoj', 'sld': 244}), (6, {'name': 'Mehadia', 'sld': 241}),
+             (7, {'name': 'Drobeta', 'sld': 242}), (8, {'name': 'Craiova', 'sld': 160}), (9, {'name': 'Pitesti', 'sld': 100}),
+             (10, {'name': 'Buchareset', 'sld': 0}), (11, {'name': 'Giurgiu', 'sld': 77}), (12, {'name': 'Urziceni', 'sld': 80}),
+             (13, {'name': 'Hirsova', 'sld': 151}), (14, {'name': 'Eforie', 'sld': 161}), (15, {'name': 'Vaslui', 'sld': 199}),
+             (16, {'name': 'Iasi', 'sld': 226}), (17, {'name': 'Neamt', 'sld': 234}), (18, {'name': 'Fagaras', 'sld': 176}),
+             (19, {'name': 'Sibiu', 'sld': 253}), (20, {'name': 'Rimnicu Vilcea', 'sld': 193})]
 
-    G.node[1]['sld'] = 380
-    G.node[2]['sld'] = 374
-    G.node[3]['sld'] = 366
-    G.node[4]['sld'] = 329
-    G.node[5]['sld'] = 244
-    G.node[6]['sld'] = 241
-    G.node[7]['sld'] = 242
-    G.node[8]['sld'] = 160
-    G.node[9]['sld'] = 100
-    G.node[10]['sld'] = 0
-    G.node[11]['sld'] = 77
-    G.node[12]['sld'] = 80
-    G.node[13]['sld'] = 151
-    G.node[14]['sld'] = 161
-    G.node[15]['sld'] = 199
-    G.node[16]['sld'] = 226
-    G.node[17]['sld'] = 234
-    G.node[18]['sld'] = 176
-    G.node[19]['sld'] = 253
-    G.node[20]['sld'] = 193
-
-
-
+    G.add_edges_from(edges)
+    G.add_nodes_from(nodes)
+    
     return G
 
 
