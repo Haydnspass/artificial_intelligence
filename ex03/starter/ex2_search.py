@@ -22,7 +22,7 @@ class PriorityQueue:
         else:
             return False
 
-    def add(self, item, priority):
+    def add(self, item, priority=0):
         """
         Add item to the queue
         :param item: any object
@@ -47,17 +47,24 @@ class PriorityQueue:
 
         return pop_item
 
+    def is_in(self, c):
+        # checks wheter a candidate c is part of the queue
+        return c in self.queue
 
 
-def heuristic(node_a, node_b):
+
+def heuristic(node_a, node_b, norm='euclidean'):
     """
     Heuristic
     :param node_a: pair, (x_a, y_a)
     :param node_b: pair, (x_b, y_b)
     :return: estimated distance between node_a and node_b
     """
+    if norm == 'euclidean':
+        dist = distance.euclidean(node_a, node_b)
+    else:
+        dist = np.nan
 
-    dist = distance.euclidean(node_a, node_b)
     return dist
 
 
@@ -75,10 +82,40 @@ def a_star_search(graph, start, goal):
     """
     came_from = dict()
     cost_so_far = dict()
-    ###
-    # Exercise: implement A* search
-    ###
-    return came_from, cost_so_far
+
+    # instance of queue
+    open_set = PriorityQueue()
+    closed_set = PriorityQueue()
+    open_set.add(start, heuristic(start, goal))
+
+    came_from[start] = None
+    cost_so_far[start] = 0
+
+    while not open_set.empty():
+        current_node = open_set.pop()
+
+        if current_node == goal:
+            return came_from, cost_so_far # reconstruct_path(came_from, start, current_node)
+
+        closed_set.add(current_node)
+
+        for n in graph.neighbors(current_node):
+            if closed_set.is_in(n):
+                continue
+
+            if not open_set.is_in(n):
+                open_set.add(n, heuristic(n, goal))
+
+            tentative_g = cost_so_far[current_node] + graph.cost(current_node, n)
+            if tentative_g >= cost_so_far:
+                continue
+
+            came_from[n] = current_node
+            cost_so_far[n] = tentative_cost
+
+            open_set.add(n, cost_so_far[n] + heuristic(n, goal))
+
+    assert True == False, 'Failure'
 
 
 def reconstruct_path(came_from, start, goal):
