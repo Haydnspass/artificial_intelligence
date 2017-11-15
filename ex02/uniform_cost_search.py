@@ -31,7 +31,7 @@ def create_romania_graph():
 
     G.add_edges_from(edges)
     G.add_nodes_from(nodes)
-    
+
     return G
 
 
@@ -48,17 +48,20 @@ def plot_graph(graph, highlighted_nodes=[]):
 
 
 def uniform_cost_search(graph, root, goal):
+    # add a queue which features min element pick
     frontier = PriorityQueue()
     frontier.put((0, root, [root]))
     explored = set()
 
     while True:
+        # raise error if empty
         try:
             if frontier.empty():
                 raise Exception('Empty Frontier')
         except NameError:
             print('Exception!')
             raise
+        # get node in queue with lowest cost
         cost, node, path = frontier.get()
 
         if node not in explored:
@@ -77,7 +80,6 @@ def greedy_best_first_search(graph, root, goal):
     frontier = PriorityQueue()
     # sld to goal
     frontier.put((graph.node[root]['sld'], root, [root]))
-    # explored = set()
 
     while True:
         try:

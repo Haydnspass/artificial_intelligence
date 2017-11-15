@@ -19,6 +19,7 @@
 \usepackage{pdfpages}
 \usepackage{epstopdf}
 \usepackage{fullpage}
+\usepackage{placeins}
 
 
 % The beginning of the document...
@@ -36,15 +37,61 @@ language = bash,
 \centerline{\LARGE \textbf{Artificial Intelligence - Exercise Sheet 2}}\vspace{0.5em}
 \centerline{\large by Lucas-Raphael Müller}\vspace{2em}
 
-\section*{Exercise 4}
+\section*{Exercise 1}
+Rotes \textit{A,B,C} with discs \textit{1,2,3}.
+Let \textit{A,B,C} be sets with discs as possible elements.\\
+\paragraph{states} discrete location of discrete set of discs
+\paragraph{actions} move $i \in {1,2,3}$ to $l \in {A,B,C| {1,2,3} not i not at l}$.
+\paragraph{goal test} is state $A = {}$, $B = {}$ and $C = {1,2,3}$
+\paragraph{path-cost} 1 p. action
 
-\begin{figure}[btp]
+\begin{figure}[!hbtp]
+	\centering
+	\includegraphics[width=.8\textwidth]{figures/space_1}
+	% \caption{$jkl$ }
+	\label{gauss1}
+\end{figure}
+
+\FloatBarrier
+\section*{Exercise 2}
+If Sensor is broken, the fastest path is to suck precautiosly at both positions, i.e. suck, move, suck, finish.
+Max. Branching ratio is 3, optimal cost 3 (suck, move, suck), max depth as shown in state space graph (6?).
+
+\begin{figure}[!hbtp]
+	\centering
+	\includegraphics[width=.8\textwidth]{figures/space_2}
+	% \caption{$jkl$ }
+	\label{gauss1}
+\end{figure}
+
+\FloatBarrier
+\section*{Exercise 3}
+See picture. Each state is expressed by the \textit{advanced} tuple (X,X) where the line above denotes the position of the vacuum.
+
+
+\begin{figure}[!hbtp]
+	\centering
+	\includegraphics[width=.8\textwidth]{figures/ex_3}
+	% \caption{$jkl$ }
+	\label{gauss1}
+\end{figure}
+
+\FloatBarrier
+\section*{Exercise 4}
+Code can be found in \ref{sec:app}.
+Best path
+\begin{lstlisting}
+path: ['Timisoara', 'Lugoj', 'Mehadia', 'Drobeta', 'Craiova', 'Pitesti', 'Buchareset']
+\end{lstlisting}
+
+\begin{figure}[!hbtp]
 	\centering
 	\includegraphics[width=.8\textwidth]{figures/graph}
 	% \caption{$jkl$ }
 	\label{gauss1}
 \end{figure}
 
+\FloatBarrier
 \section*{Exercise 5}
 \begin{lstlisting}
 Current node: Oradea
@@ -76,6 +123,7 @@ Current node: Rimnicu Vilcea
 
 \newpage
 \section{Appendix: Python Source Code}
+\label{sec:app}
 Changed code to python3.
 \lstinputlisting[language=Python]{uniform_cost_search.py}
 
