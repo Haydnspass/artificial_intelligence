@@ -11,6 +11,16 @@ def f(x):
 
 
 def minimize(x, y, start_position):
+    def environment(x_i, boundaries, eps=2.5):
+        while True:
+            x_i = x_i + 2 * eps * np.random.random_sample() - eps
+            if (x_i > boundaries[0]) and (x_i < boundaries[1]):
+                break
+        return x_i
+
+    def free_energy(x1, x2, T):
+        f_e = np.exp(-(f(x2) - f(x1))/T)
+        return f_e
     """
     Minimize the energy function.
     :param x: array, x coordinates
@@ -19,12 +29,23 @@ def minimize(x, y, start_position):
     :return: position with the minimal found value of energy function
     """
     best_pos = 0
-    for iter_num in xrange(400):
-        ###
-        # Exercise: implement Simulated annealing
-        # update best_pos if found the better one
-        ###
-        pass
+    temp = 500
+    alpha = 0.95
+
+    #env = np.arange(x.__len__())
+    for iter_num in range(500):
+        temp = temp * alpha
+        # move to different index of x by chance, so s is index not position
+        while True:
+            s = best_pos + np.random.choice([-2,-1,1,2])
+            if s >= 0 and s <= x.__len__():
+                break
+
+        if f(x[s]) <= f(x[best_pos]):
+            best_pos = s
+        else:
+            if free_energy(x[best_pos], x[s], temp) >= np.random.random_sample():
+                best_pos = s
 
     assert 0 <= best_pos < len(y), 'incorrect index'
     return best_pos
