@@ -22,7 +22,7 @@ class PriorityQueue:
         else:
             return False
 
-    def add(self, item, priority=0):
+    def add(self, item, priority=np.inf):
         """
         Add item to the queue
         :param item: any object
@@ -52,6 +52,11 @@ class PriorityQueue:
         return c in self.queue
 
 
+    def new_priority(self, item, priority):
+        ix = self.queue.index(item)
+        self.priority[ix] = priority
+
+
 
 def heuristic(node_a, node_b, norm='euclidean'):
     """
@@ -62,6 +67,10 @@ def heuristic(node_a, node_b, norm='euclidean'):
     """
     if norm == 'euclidean':
         dist = distance.euclidean(node_a, node_b)
+    elif norm == 'cityblock':
+        dist = distance.cityblock(node_a, node_b)
+    elif norm == 'zero':
+        dist = 0
     else:
         dist = np.nan
 
@@ -80,22 +89,24 @@ def a_star_search(graph, start, goal):
             This dict will be used to restore final path.
         cost_so_far: dict,
     """
-    came_from = dict()
-    cost_so_far = dict()
-
-    # instance of queue
     open_set = PriorityQueue()
     closed_set = PriorityQueue()
-    open_set.add(start, heuristic(start, goal))
 
+    came_from = dict()
+    fScore = dict()
+    gScore = dict()
+
+    open_set.add(start)
+    gScore[start] = 0
+    fScore[start] = gScore[start] + heuristic(start, goal)
+    open_set.new_priority(start, fScore[start])
     came_from[start] = None
-    cost_so_far[start] = 0
 
     while not open_set.empty():
         current_node = open_set.pop()
 
         if current_node == goal:
-            return came_from, cost_so_far # reconstruct_path(came_from, start, current_node)
+            return came_from, gScore # reconstruct_path(came_from, start, current_node)
 
         closed_set.add(current_node)
 
@@ -104,16 +115,16 @@ def a_star_search(graph, start, goal):
                 continue
 
             if not open_set.is_in(n):
-                open_set.add(n, heuristic(n, goal))
+                open_set.add(n)
 
-            tentative_g = cost_so_far[current_node] + graph.cost(current_node, n)
-            if tentative_g >= cost_so_far:
+            tentative_g = gScore[current_node] + graph.cost(current_node, n)
+            if n in gScore and  tentative_g >= gScore[n]:
                 continue
 
             came_from[n] = current_node
-            cost_so_far[n] = tentative_g
-
-            open_set.add(n, cost_so_far[n] + heuristic(n, goal))
+            gScore[n] = tentative_g
+            fScore[n] = gScore[n] + heuristic(n, goal)
+            open_set.new_priority(n, fScore[n])
 
     assert True == False, 'Failure'
 
