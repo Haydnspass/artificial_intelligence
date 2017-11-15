@@ -111,7 +111,7 @@ def a_star_search(graph, start, goal):
                 continue
 
             came_from[n] = current_node
-            cost_so_far[n] = tentative_cost
+            cost_so_far[n] = tentative_g
 
             open_set.add(n, cost_so_far[n] + heuristic(n, goal))
 
