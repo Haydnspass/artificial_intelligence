@@ -1,4 +1,7 @@
 import collections
+import numpy as np
+from scipy.spatial import distance
+import itertools
 
 
 class PriorityQueue:
@@ -6,13 +9,18 @@ class PriorityQueue:
     # Exercise: implement PriorityQueue
     ###
     def __init__(self):
-        pass
+        self.queue = []
+        self.priority = []
+        self.index = 0
 
     def empty(self):
         """
         :return: True if the queue is empty, False otherwise.
         """
-        pass
+        if self.index == 0:
+            return True
+        else:
+            return False
 
     def add(self, item, priority):
         """
@@ -20,14 +28,25 @@ class PriorityQueue:
         :param item: any object
         :param priority: int
         """
-        pass
+        self.queue = self.queue + [item]
+        self.priority = self.priority + [priority]
+        self.index = self.index + 1
 
     def pop(self):
         """
         Get the item with the minimal priority and remove it from the queue.
         :return: item with the minimal priority
         """
-        pass
+        if self.empty():
+            return []
+        ix_prior = np.argmin(self.priority)
+        pop_item = self.queue[ix_prior]
+        self.index = self.index - 1
+        self.priority.pop(ix_prior)
+        self.queue.pop(ix_prior)
+
+        return pop_item
+
 
 
 def heuristic(node_a, node_b):
@@ -37,10 +56,9 @@ def heuristic(node_a, node_b):
     :param node_b: pair, (x_b, y_b)
     :return: estimated distance between node_a and node_b
     """
-    ###
-    # Exercise: implement a heuristic for A* search
-    ###
-    return 0
+
+    dist = distance.euclidean(node_a, node_b)
+    return dist
 
 
 def a_star_search(graph, start, goal):
@@ -83,3 +101,12 @@ def reconstruct_path(came_from, start, goal):
     path.append(start)
     path.reverse()
     return path
+
+if __name__ == '__main__':
+    # q = PriorityQueue()
+    # q.add(3, 5)
+    # q.add(3, 1)
+    # q.add(2, 3)
+    #
+    # q.pop()
+    print(heuristic([5,5],[7,7]))
