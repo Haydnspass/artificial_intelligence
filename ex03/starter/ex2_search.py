@@ -32,6 +32,11 @@ class PriorityQueue:
         self.priority = self.priority + [priority]
         self.index = self.index + 1
 
+    def decrease(self, item, priority):
+        ix = self.queue.index(item)
+        self.priority[ix] = priority
+
+
     def pop(self):
         """
         Get the item with the minimal priority and remove it from the queue.
@@ -103,17 +108,20 @@ def a_star_search(graph, start, goal):
             if closed_set.is_in(n):
                 continue
 
-            if not open_set.is_in(n):
-                open_set.add(n, heuristic(n, goal))
-
             tentative_g = cost_so_far[current_node] + graph.cost(current_node, n)
-            if tentative_g >= cost_so_far:
+
+            if open_set.is_in(n) and tentative_g >= cost_so_far[n]:
                 continue
 
             came_from[n] = current_node
-            cost_so_far[n] = tentative_cost
+            cost_so_far[n] = tentative_g
 
-            open_set.add(n, cost_so_far[n] + heuristic(n, goal))
+            f = tentative_g + heuristic(n, goal)
+
+            if open_set.is_in(n):
+                open_set.decrease(n, f)
+            else:
+                open_set.add(n, f)
 
     assert True == False, 'Failure'
 
