@@ -1,5 +1,6 @@
 import collections
 import numpy as np
+import math
 from scipy.spatial import distance
 import itertools
 
@@ -58,7 +59,7 @@ class PriorityQueue:
 
 
 
-def heuristic(node_a, node_b, norm='euclidean'):
+def heuristic(node_a, node_b, norm='euclidean_mat'):
     """
     Heuristic
     :param node_a: pair, (x_a, y_a)
@@ -67,6 +68,12 @@ def heuristic(node_a, node_b, norm='euclidean'):
     """
     if norm == 'euclidean':
         dist = distance.euclidean(node_a, node_b)
+    elif norm == 'euclidean_mat':
+        dist = math.sqrt(abs(node_a[0] - node_b[0]) + abs(node_a[1] - node_b[1]))
+    elif norm == 'cityblock':
+        dist = distance.cityblock(node_a, node_b)
+    elif norm == 'zero':
+        dist = 0
     else:
         dist = np.nan
 
@@ -90,7 +97,7 @@ def a_star_search(graph, start, goal):
 
     # instance of queue
     open_set = PriorityQueue()
-    closed_set = PriorityQueue()
+    closed_set = []
     open_set.add(start, heuristic(start, goal))
 
     came_from[start] = None
@@ -102,25 +109,19 @@ def a_star_search(graph, start, goal):
         if current_node == goal:
             return came_from, cost_so_far # reconstruct_path(came_from, start, current_node)
 
-        closed_set.add(current_node)
+        closed_set = closed_set + [current_node]
 
         for n in graph.neighbors(current_node):
-            if closed_set.is_in(n):
-                continue
+            # if n in closed_set:
+            #     continue
 
-            tentative_g = cost_so_far[current_node] + graph.cost(current_node, n)
+            g = cost_so_far[current_node] + 1
+            h = heuristic(n, goal)
+            f = h + g
 
-            if open_set.is_in(n) and tentative_g >= cost_so_far[n]:
-                continue
-
-            came_from[n] = current_node
-            cost_so_far[n] = tentative_g
-
-            f = tentative_g + heuristic(n, goal)
-
-            if open_set.is_in(n):
-                open_set.decrease(n, f)
-            else:
+            if n not in cost_so_far:
+                cost_so_far[n] = g
+                came_from[n] = current_node
                 open_set.add(n, f)
 
     assert True == False, 'Failure'
