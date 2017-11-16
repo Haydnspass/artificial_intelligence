@@ -59,7 +59,7 @@ class PriorityQueue:
 
 
 
-def heuristic(node_a, node_b, norm='euclidean_mat'):
+def heuristic(node_a, node_b, norm='cityblock'):
     """
     Heuristic
     :param node_a: pair, (x_a, y_a)
@@ -96,14 +96,11 @@ def a_star_search(graph, start, goal):
     """
     came_from = dict()
     cost_so_far = dict()
-
-    # instance of queue
+    cost_so_far[start] = 0
     open_set = PriorityQueue()
     closed_set = []
-    open_set.add(start, heuristic(start, goal))
 
-    came_from[start] = None
-    cost_so_far[start] = 0
+    open_set.add(start, heuristic(start, goal))
 
     while not open_set.empty():
         current_node = open_set.pop()
@@ -119,19 +116,18 @@ def a_star_search(graph, start, goal):
 
             g = cost_so_far[current_node] + graph.cost(current_node, n)
             h = heuristic(n, goal)
-            f = h + g
+            f = g + h
 
             if not open_set.is_in(n):
                 open_set.add(n, f)
             elif cost_so_far[n] > g:
                 open_set.decrease(n, f)
-            else:   continue
-
+            else: continue
 
             came_from[n] = current_node
             cost_so_far[n] = g
 
-    assert True == False, 'Failure'
+    return came_from, cost_so_far
 
 
 def reconstruct_path(came_from, start, goal):
