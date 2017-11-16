@@ -72,6 +72,8 @@ def heuristic(node_a, node_b, norm='euclidean_mat'):
         dist = math.sqrt(abs(node_a[0] - node_b[0]) + abs(node_a[1] - node_b[1]))
     elif norm == 'cityblock':
         dist = distance.cityblock(node_a, node_b)
+    elif norm == 'min_coord':
+        dist = np.min(np.abs(np.subtract(node_b, node_a)))
     elif norm == 'zero':
         dist = 0
     else:
@@ -112,17 +114,22 @@ def a_star_search(graph, start, goal):
         closed_set = closed_set + [current_node]
 
         for n in graph.neighbors(current_node):
-            # if n in closed_set:
-            #     continue
+            if n in closed_set:
+                continue
 
-            g = cost_so_far[current_node] + 1
+            g = cost_so_far[current_node] + graph.cost(current_node, n)
             h = heuristic(n, goal)
             f = h + g
 
-            if n not in cost_so_far:
-                cost_so_far[n] = g
-                came_from[n] = current_node
+            if not open_set.is_in(n):
                 open_set.add(n, f)
+            elif cost_so_far[n] > g:
+                open_set.decrease(n, f)
+            else:   continue
+
+
+            came_from[n] = current_node
+            cost_so_far[n] = g
 
     assert True == False, 'Failure'
 
