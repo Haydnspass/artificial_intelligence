@@ -108,24 +108,29 @@ def a_star_search(graph, start, goal):
         if current_node == goal:
             return came_from, cost_so_far # reconstruct_path(came_from, start, current_node)
 
-        closed_set = closed_set + [current_node]
+        # closed_set = closed_set + [current_node]
 
         for n in graph.neighbors(current_node):
-            if n in closed_set:
-                continue
+            # if n in closed_set:
+            #     continue
 
             g = cost_so_far[current_node] + graph.cost(current_node, n)
             h = heuristic(n, goal)
             f = g + h
 
-            if not open_set.is_in(n):
+            if n not in cost_so_far or g < cost_so_far[n]:
+                came_from[n] = current_node
+                cost_so_far[n] = g
                 open_set.add(n, f)
-            elif cost_so_far[n] > g:
-                open_set.decrease(n, f)
-            else: continue
 
-            came_from[n] = current_node
-            cost_so_far[n] = g
+            # if not open_set.is_in(n):
+            #     open_set.add(n, f)
+            # elif cost_so_far[n] > g:
+            #     open_set.decrease(n, f)
+            # else: continue
+            #
+            # came_from[n] = current_node
+            # cost_so_far[n] = g
 
     return came_from, cost_so_far
 
