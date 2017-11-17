@@ -59,7 +59,7 @@ class PriorityQueue:
 
 
 
-def heuristic(node_a, node_b, norm='cityblock'):
+def heuristic(node_a, node_b, norm='cityblock', p=1/1000):
     """
     Heuristic
     :param node_a: pair, (x_a, y_a)
@@ -72,6 +72,9 @@ def heuristic(node_a, node_b, norm='cityblock'):
         dist = math.sqrt(abs(node_a[0] - node_b[0]) + abs(node_a[1] - node_b[1]))
     elif norm == 'cityblock':
         dist = distance.cityblock(node_a, node_b)
+    elif norm == 'cityblock_tiebraker':
+        dist = distance.cityblock(node_a, node_b)
+        dist = dist + hash(node_a) / (3713065393997706731 * 1000)
     elif norm == 'min_coord':
         dist = np.min(np.abs(np.subtract(node_b, node_a)))
     elif norm == 'zero':
@@ -94,6 +97,8 @@ def a_star_search(graph, start, goal):
             This dict will be used to restore final path.
         cost_so_far: dict,
     """
+    graph.walls = set(graph.walls)
+
     came_from = dict()
     cost_so_far = dict()
     cost_so_far[start] = 0
