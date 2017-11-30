@@ -34,7 +34,7 @@ class Board(object):
 
     @property
     def num_coins(self):
-        return np.sum(b.board == self.PLAYER_1) + np.sum(b.board == self.PLAYER_2)
+        return np.sum(self.board == self.PLAYER_1) + np.sum(self.board == self.PLAYER_2)
 
     @property
     def current_player(self):
