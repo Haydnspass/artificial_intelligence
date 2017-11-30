@@ -11,11 +11,25 @@ result.append([])
 test_board.append(np.array([['X', 'O', 'X'], ['O', '', 'O'], ['X', 'O', 'X']]))
 result.append([[1, 1]])
 
+def test_full_board():
+    t = test_board[0]
+    r = result[0]
+    b = Board(t)
+    assert b.possible_moves() == r
+
+
+def test_semi_full_board():
+    t = test_board[1]
+    r = result[1]
+    bl = Board(t)
+    assert np.array_equal(bl.possible_moves(), r)
+    
+
 test_alg = list()
 result_alg = list()
 
 """
-NOTE: The following board configurations must be valid in a sense that are reachable, 
+NOTE: The following board configurations must be valid in a sense that they are reachable, 
 since current and next players are determined by the board configuration.
 """
 
@@ -44,26 +58,10 @@ result_alg.append([2, 0])
 
 
 
-def test_full_board():
-    t = test_board[0]
-    r = result[0]
-    b = Board(t)
-    assert b.possible_moves() == r
 
-
-def test_semi_full_board():
-    t = test_board[1]
-    r = result[1]
-    bl = Board(t)
-    assert np.array_equal(bl.possible_moves(), r)
 
 
 def test_minimax():
     for t, r in zip(test_alg, result_alg):
         b = Board(t)
         assert np.array_equal(minimax(b), r)
-
-
-if __name__ == '__main__':
-    test_semi_full_board()
-    test_minimax()
