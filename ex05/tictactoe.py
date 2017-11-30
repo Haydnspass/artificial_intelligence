@@ -24,7 +24,7 @@ class Board(object):
             return []
         return is_empty
 
-    def parse(self, move, player, deep=False):
+    def parse(self, move, player, deep=True):
         if deep:
             cloned_board = deepcopy(self)
             cloned_board.board[tuple(move)] = player
@@ -55,7 +55,7 @@ class Board(object):
             u = u + np.sum(np.diag(self.board) == player)
             u = u + np.sum(np.diag(np.fliplr(self.board)) == player)
 
-            if self.check_winner(self, player):
+            if self.check_winner(player):
                 u = np.inf
         elif mode == 'hard':
             if self.check_winner(player):
@@ -63,52 +63,76 @@ class Board(object):
 
         return u
 
-    def check_winner(self, player):
+    def check_winner(self, player=[PLAYER_1, PLAYER_2]):
         if self.num_coins <= 4:
             return False
 
-        for i in range(board_rows):
-            if np.sum(self.board[i,:] == player) >= self.win_count:
+        for p in player:
+            for i in range(board_rows):
+                if np.sum(self.board[i, :] == p) >= self.win_count:
+                    return True
+            for i in range(board_cols):
+                if np.sum(self.board[:, i] == p) >= self.win_count:
+                    return True
+            # maybe add nebendiagonalen later
+            if np.sum(np.diag(self.board) == p) >= self.win_count:
                 return True
-        for i in range(board_cols):
-            if np.sum(self.board[:,i] == player) >= self.win_count:
+            if np.sum(np.diag(np.fliplr(self.board)) == p) >= self.win_count:
                 return True
-        # maybe add nebendiagonalen later
-        if np.sum(np.diag(self.board) == player) >= self.win_count:
-            return True
-        if np.sum(np.diag(np.fliplr(self.board)) == player) >= self.win_count:
-            return True
 
         return False
 
 
+def minimax(graph):
 
+    def min_play(graph):
+        if graph.check_winner():
+            return graph.utility(graph.PLAYER_1)
 
+        best_score = float('inf')
 
-def minimax(board, depth, maxi_player):
-    if depth == 0 or board.possible_moves() == []:
-        return (board.utility(board.current_player, mode='hard'), board.board)
+        for move in graph.possible_moves():
+            clone = graph.parse(move, graph.next_player)
+            score = max_play(clone)
 
-    if maxi_player:
-        best_v = -np.inf
-        for c in board.possible_moves():
-            clone = Board(board.board)
-            clone.parse(c, clone.next_player)
-            v, _ = minimax(clone, depth - 1, False)
-            best_v = max(best_v, v)
-        return (best_v, board.board)
+            if score < best_score:
+                best_move = move
+                best_score = score
 
-    else:
-        best_v = np.inf
-        for c in board.possible_moves():
-            clone = Board(board.board)
-            clone.parse(c, clone.next_player)
-            v, _ = minimax(clone, depth - 1, True)
-            best_v = min(best_v, v)
-        return (best_v, board.board)
+        return best_score
+
+    def max_play(graph):
+        if graph.check_winner():
+            return graph.utility(graph.PLAYER_1)
+
+        best_score = float('-inf')
+
+        for move in graph.possible_moves():
+            clone = graph.parse(move, graph.next_player)
+            score = min_play(clone)
+
+            if score > best_score:
+                best_move = move
+                best_score = score
+
+        return best_score
+
+    moves = graph.possible_moves()
+    best_move = moves[0]
+    best_score = float('-inf')
+    for move in moves:
+        clone = graph.parse(move, graph.next_player)
+        score = min_play(clone)
+        if score > best_score:
+            best_move = move
+            best_score = score
+    return best_move
 
 
 if __name__ == '__main__':
-    b = Board()
-    v, b = minimax(b, 7, True)
-    print(v, b)
+    b = Board(np.array([
+    ['O', '', 'X'],
+    ['O', '', 'X'],
+    ['', '', '']]))
+    v = minimax(b)
+    print(v)
