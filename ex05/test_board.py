@@ -23,7 +23,7 @@ def test_semi_full_board():
     r = result[1]
     bl = Board(t)
     assert np.array_equal(bl.possible_moves(), r)
-    
+
 
 test_alg = list()
 result_alg = list()
@@ -55,10 +55,6 @@ test_alg.append(np.array([
     ['', '', '']]))
 
 result_alg.append([2, 0])
-
-
-
-
 
 
 def test_minimax():

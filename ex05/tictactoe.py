@@ -12,8 +12,13 @@ class Board(object):
 
     win_count = 3
 
-    def __init__(self, board=np.empty((board_rows, board_cols), dtype=str)):
+    def __init__(self, board=np.empty((board_rows, board_cols), dtype=str), computer_player=[]):
         self.board = board
+        if computer_player == []:
+            self.computer_player = self.next_player
+            print('Computer is player: ', self.computer_player)
+        else:
+            self.computer_player = computer_player
 
     def possible_moves(self):
         if self.check_winner(self.PLAYER_1) or self.check_winner(self.PLAYER_2):
@@ -38,11 +43,17 @@ class Board(object):
 
     @property
     def current_player(self):
-        return self.PLAYER_2 if self.num_coins % 2 == 0 else self.PLAYER_1
+        if self.next_player == self.PLAYER_1:
+            return self.PLAYER_2 # to make player 1 first player
+        else:
+            return self.PLAYER_1
 
     @property
     def next_player(self):
-        return self.PLAYER_1 if self.num_coins % 2 == 0 else self.PLAYER_2
+        if np.sum(self.board == self.PLAYER_1) > np.sum(self.board == self.PLAYER_2):
+            return self.PLAYER_2 # to make player 1 first player
+        else:
+            return self.PLAYER_1
 
     def utility(self, player, mode='soft'):
         u = 0
@@ -87,12 +98,12 @@ def minimax(graph):
 
     def min_play(graph):
         if graph.check_winner():
-            return graph.utility(graph.PLAYER_1)
+            return graph.utility(graph.computer_player)
 
         best_score = float('inf')
 
         for move in graph.possible_moves():
-            clone = graph.parse(move, graph.next_player)
+            clone = graph.parse(move, graph.next_player, graph.computer_player)
             score = max_play(clone)
 
             if score < best_score:
@@ -103,12 +114,12 @@ def minimax(graph):
 
     def max_play(graph):
         if graph.check_winner():
-            return graph.utility(graph.PLAYER_1)
+            return graph.utility(graph.computer_player)
 
         best_score = float('-inf')
 
         for move in graph.possible_moves():
-            clone = graph.parse(move, graph.next_player)
+            clone = graph.parse(move, graph.next_player, graph.computer_player)
             score = min_play(clone)
 
             if score > best_score:
@@ -121,7 +132,7 @@ def minimax(graph):
     best_move = moves[0]
     best_score = float('-inf')
     for move in moves:
-        clone = graph.parse(move, graph.next_player)
+        clone = graph.parse(move, graph.next_player, graph.computer_player)
         score = min_play(clone)
         if score > best_score:
             best_move = move
@@ -131,8 +142,8 @@ def minimax(graph):
 
 if __name__ == '__main__':
     b = Board(np.array([
-    ['O', '', 'X'],
-    ['O', '', 'X'],
-    ['', '', '']]))
+    ['X', '', ''],
+    ['', 'X', 'O'],
+    ['X', 'O', '']]))
     v = minimax(b)
     print(v)
