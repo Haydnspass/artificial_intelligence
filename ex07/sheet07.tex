@@ -1,0 +1,74 @@
+% Lines that start with a % are comments and are not included when the LaTeX file is converted to a pdf
+
+% Set up the document class - this can be changed if a different format is required 
+\documentclass[11pt,a4paper,twoside]{article}
+
+% Include packages that contain additional features, for example including special mathematical characters and images in your document
+\usepackage{amssymb,amsmath,graphicx}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc}   % here are our umlauts...
+\usepackage{graphicx} % ...and our graphics
+\usepackage{listings}
+\usepackage{bold-extra}
+\usepackage[plainpages=false, pdfpagelabels, colorlinks=true, breaklinks=true, linkcolor=black, menucolor=black, urlcolor=black, citecolor=black]{hyperref}
+\usepackage[font=sf, labelfont={sf,bf}, margin=1cm]{caption}
+\usepackage[b]{esvect}
+% Long equations
+\usepackage{breqn} 
+%include pdfs
+\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage{epstopdf}
+%\usepackage{fullpage}
+\usepackage{placeins}
+\usepackage{pdfpages}
+
+
+% The beginning of the document...
+\begin{document}
+\renewcommand\thesubsection{\alph{subsection})}
+
+% configure standard code listings:
+\lstset {
+language = bash,
+	breaklines = true,
+	breakatwhitespace = true
+}
+
+% Please change the following accordingly...
+\centerline{\LARGE \textbf{Artificial Intelligence - Exercise Sheet 7}}\vspace{0.5em}
+\centerline{\large by Lucas-Raphael Müller}\vspace{2em}
+
+
+\section{Types of Learning}
+\paragraph{Supervised Learning} is the type of learning where training data comes along with target images. Easy examples are handwritten digits, such as the MNIST dataset. Labeled data allows for computing a loss.
+\paragraph{Unsupervised Learning} does not allow for the computation of a loss, since input data is unlabeled, i.e. without ground truth.
+The task is to infer similarities among input data.  
+An example would be facial recognition without knowing who is on which picture.
+\paragraph{Semi-supervised Learning} is a mixture of super- and unsupervised learning, where some input data comes labeled, some not.
+\paragraph{Reinforcement Learning} features a reward, which has to be maximised (minimised) by the algorithm with a not defined action within a defined set of possible actions (e.g. put a coin in column 1-7).
+For example, a connect4 session where player A won, could be rewarded with 1, a session which has been lost with -1 and a draw with 0.
+A probably faster converging reward function in this case would be 100 for a session which has been won, 10 for 3 coins in a row, 1 for 2 in a row.
+
+\section{Learning as Optimisation Problem}
+
+\section{}
+
+
+
+
+
+\FloatBarrier
+
+\newpage
+\section{Appendix: Python Source Code}
+\label{sec:app}
+
+\subsection{Testing minimax}
+\label{sub:testing}
+\lstinputlisting[language=Python]{test_board.py}
+
+\subsection{Code}
+\lstinputlisting[language=Python]{tictactoe.py}
+
+\end{document}
