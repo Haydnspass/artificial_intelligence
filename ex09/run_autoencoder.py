@@ -1,4 +1,5 @@
 import argparse
+import dill
 import numpy as np
 import torch
 import torch.nn as nn
@@ -18,8 +19,9 @@ class Args:
         self.momentum = 0.5
         self.no_cuda = False
         self.seed = np.random.randint(32000)
-        self.log_interval = 10
-        
+        self.log_interval = 100
+
+
 def train(epoch, lossfunction):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
@@ -28,7 +30,7 @@ def train(epoch, lossfunction):
         data, target = Variable(data), Variable(target)
         optimizer.zero_grad()
         output = model(data)
-        loss = lossfunction(output, target)
+        loss = lossfunction(output, data)
         loss.backward()
         optimizer.step()
         if batch_idx % args.log_interval == 0:
@@ -36,27 +38,35 @@ def train(epoch, lossfunction):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.data[0]))
                 
-        return loss.data[0]
-                
+    return loss.data[0]
+
+
 def test(lossfunction):
     model.eval()
     test_loss = 0
-    correct = 0
+    
     for data, target in test_loader:
         if args.cuda:
             data, target = data.cuda(), target.cuda()
             
         data, target = Variable(data, volatile=True), Variable(target)
         output = model(data)
-        test_loss += lossfunction(output, target, size_average=False).data[0] # sum up batch loss
-        pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
-        correct += pred.eq(target.data.view_as(pred)).cpu().sum()
+        test_loss += lossfunction(output, data)#.data[0] # sum up batch loss
+        sample =output[0, :]
+        truth = data[0,:]
+        # pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
+        # correct += pred.eq(target.data.view_as(pred)).cpu().sum()
 
-    test_loss /= len(test_loader.dataset)
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)))
-    return 100. * correct / len(test_loader.dataset)
+    #test_loss /= len(test_loader.dataset)
+    print('\nTest set: loss: {}\n'.format(test_loss.data[0]))
+    return test_loss.data[0], sample, truth
+
+
+def plot_evolution_of_sample(data, evolution):
+    pass
+    
+def plot_evolution_test_training(training, testing):
+    pass
                 
 if __name__ == '__main__':
 
@@ -70,14 +80,14 @@ if __name__ == '__main__':
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
     train_loader = torch.utils.data.DataLoader(
-        datasets.FashionMNIST('../data', train=True, download=True,
+        datasets.FashionMNIST('data', train=True, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
         batch_size=args.batch_size, shuffle=True, **kwargs)
     test_loader = torch.utils.data.DataLoader(
-        datasets.FashionMNIST('../data', train=False, transform=transforms.Compose([
+        datasets.FashionMNIST('data', train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
@@ -91,13 +101,24 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     criterion = torch.nn.MSELoss()
     
-    best_acc = 0.
+    best_loss = float('inf')
+    
+    train_evo = []
+    test_evo = []
+    sample_evo = []
+    truth_evo = []
+    
     for epoch in range(1, args.epochs + 1):
-        train(epoch, criterion)
-        acc = test(criterion)
-        if acc > best_acc:
-            print('New best accuracy achieved: {:.2f}%\n'.format(acc))
-            best_acc = acc
-            torch.save(model.state_dict(), 'best_model_mnist2.pth')
-    
-    
+        train_evo.append(train(epoch, criterion))
+        loss, sample, truth = test(criterion)
+        test_evo.append(loss)
+        sample_evo.append(sample)
+        truth_evo.append(truth)
+        
+        if loss < best_loss:
+            print('New best loss achieved: {:.2f}\n'.format(loss))
+            best_loss = loss
+            torch.save(model.state_dict(), 'best_model_2.pth')
+
+    filename = 'globalsave2.pkl'
+    dill.dump_session(filename)

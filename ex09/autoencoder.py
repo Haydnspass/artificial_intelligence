@@ -73,3 +73,8 @@ class Autoencoder(nn.Module):
         x = self.decoder(x)
         
         return x
+        
+    def encode(self, x):
+        x = x.view(x.size(0),-1)
+        x = self.encoder(x)
+        return x

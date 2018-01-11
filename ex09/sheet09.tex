@@ -1,4 +1,4 @@
-% Lines that start with a % are comments and are not included when the LaTeX file is converted to a pdf
+width=.6\textwidth]{% Lines that start with a % are comments and are not included when the LaTeX file is converted to a pdf
 
 % Set up the document class - this can be changed if a different format is required 
 \documentclass[11pt,a4paper,oneside]{article}
@@ -74,22 +74,79 @@ Therefore, stochastic gradient descent is much faster.
 \paragraph{Mini-Batch Gradient Descent} In mini-batch gradient descent a (small) subset of the whole training dataset $x$ is being used as a compromise between batch and stochastic gradient descent, and performance vs. speed.
 
 \section{Implementing an Autoencoder}
+\begin{figure}
+	\centering
+	\includegraphics[width=.9\textwidth]{figures/auto_encoder_evolution}
+	\caption{Evolution of Train and Test loss.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.9\textwidth]{figures/t_sne}
+	\caption{TSNE representation.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_0}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_1}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_2}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_3}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_4}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_5}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_6}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_7}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_8}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_9}
+	\caption{Original Image and after autoencoder.}
+\end{figure}
 
-
+\section{Denoising Autoencoder}
 
 
 \FloatBarrier
 
 \newpage
-% \section{Appendix: Python Source Code}
-% \label{sec:app}
-% 
-% \subsection{Classification of Fashion-MNIST dataset}
-% \includepdf[pages=-]{classification_fmnist} 
-% \subsection{t-SNE visualisation}
-% \includepdf[pages=-]{t-sne-visualization}
-% \subsection{What did the network learn?}
-% \lstinputlisting[language=Python]{dreamer.py}
+\section{Appendix: Python Source Code}
+\label{sec:app}
+
+\subsection{Autoencoder}
+\lstinputlisting[language=Python]{autoencoder.py}
+\lstinputlisting[language=Python]{run_autoencoder.py}
 
 
 \end{document}
