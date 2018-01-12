@@ -25,19 +25,20 @@ def add_white_noise(x, factor=0.5, stddev=1):
     :return: ND Tensor, x with white noise
     """
     # add white noise to tensor
-    noise = x.clone().normal_(0, stddev)
+    noise = torch.normal(means=torch.zeros_like(x), std=(stddev*torch.ones_like(x))) #x.clone().normal_(0, stddev)
     return x + noise * factor
 
 
 class Autoencoder(nn.Module):
 
-    def __init__(self, input_shape=(28, 28)):
+    def __init__(self, input_shape=(28, 28), noise_add=False):
         super(Autoencoder, self).__init__()
         
         self.input_dim = input_shape
         self.encoder_firstDim = input_shape[0] * input_shape[1] #torch.prod(self.input_dim)
         self.encoder_lastDim = 8
         self.decoder_firstDim = self.encoder_lastDim
+        self.noise_add = noise_add
         
         self.encoder = nn.Sequential(
             nn.Linear(self.encoder_firstDim, 128),
@@ -68,8 +69,10 @@ class Autoencoder(nn.Module):
         
         x = x.view(x.size(0),-1)
         
-        x = self.encoder(x)
+        if self.noise_add:
+            x = add_white_noise(x)
         
+        x = self.encoder(x)
         x = self.decoder(x)
         
         return x

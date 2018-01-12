@@ -1,5 +1,3 @@
-width=.6\textwidth]{% Lines that start with a % are comments and are not included when the LaTeX file is converted to a pdf
-
 % Set up the document class - this can be changed if a different format is required 
 \documentclass[11pt,a4paper,oneside]{article}
 
@@ -74,6 +72,12 @@ Therefore, stochastic gradient descent is much faster.
 \paragraph{Mini-Batch Gradient Descent} In mini-batch gradient descent a (small) subset of the whole training dataset $x$ is being used as a compromise between batch and stochastic gradient descent, and performance vs. speed.
 
 \section{Implementing an Autoencoder}
+I was unsure, how the first linear layer was actually meant. So whether it was input layer plus linear layer of again 8 neurons, or just the input layer (line 56, as above).
+I also saw no point in just reporting every 10th epoche for testing, since testing is performed once per epoch?
+
+Implemented autoencoder as follows:
+\lstinputlisting[language=Python]{autoencoder.py}
+
 \begin{figure}
 	\centering
 	\includegraphics[width=.9\textwidth]{figures/auto_encoder_evolution}
@@ -86,57 +90,119 @@ Therefore, stochastic gradient descent is much faster.
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_0}
+	\includegraphics[width=\textwidth]{figures/save_ev_0}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_1}
+	\includegraphics[width=\textwidth]{figures/save_ev_1}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_2}
+	\includegraphics[width=\textwidth]{figures/save_ev_2}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_3}
+	\includegraphics[width=\textwidth]{figures/save_ev_3}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_4}
+	\includegraphics[width=\textwidth]{figures/save_ev_4}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_5}
+	\includegraphics[width=\textwidth]{figures/save_ev_5}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_6}
+	\includegraphics[width=\textwidth]{figures/save_ev_6}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_7}
+	\includegraphics[width=\textwidth]{figures/save_ev_7}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_8}
+	\includegraphics[width=\textwidth]{figures/save_ev_8}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 \begin{figure}[!btp]
 	\centering
-	\includegraphics[width=.6\textwidth]{figures/save_ev_9}
+	\includegraphics[width=\textwidth]{figures/save_ev_9}
 	\caption{Original Image and after autoencoder.}
 \end{figure}
 
+\FloatBarrier
 \section{Denoising Autoencoder}
-
+I could not see much of a difference between both autoencoders. 
+This is probably because noise does not alter principal components (important eigenvalues).
+\begin{figure}
+	\centering
+	\includegraphics[width=.9\textwidth]{figures/auto_encoder_de_evolution}
+	\caption{Evolution of Train and Test loss.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.9\textwidth]{figures/t_sne_denois}
+	\caption{TSNE representation.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_0}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_1}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_2}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_3}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_4}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_5}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_6}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_7}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_8}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
+\begin{figure}[!btp]
+	\centering
+	\includegraphics[width=.6\textwidth]{figures/save_ev_de_9}
+	\caption{Original Image, noisy input and output.}
+\end{figure}
 
 \FloatBarrier
 
