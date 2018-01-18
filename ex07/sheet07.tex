@@ -50,12 +50,55 @@ An example would be facial recognition without knowing who is on which picture.
 For example, a connect4 session where player A won, could be rewarded with 1, a session which has been lost with -1 and a draw with 0.
 A probably faster converging reward function in this case would be 100 for a session which has been won, 10 for 3 coins in a row, 1 for 2 in a row.
 
-\section{Learning as Optimisation Problem}
+\section{Learning as an Optimisation Problem}
+With
+\begin{align}
+	y &= f(x,W) \\
+	r_i = e_i &= f(x_i,W) - y_i,
+\end{align}
+\paragraph{Optimisation Problem} We can use
+\begin{align}
+	\min\limits_W F(W,{(x_i,y_i)}_{i=1}^m)
+\end{align}
+with
+\begin{align}
+	F(e_i) = \sum\limits_i r_i^2,
+\end{align}
+which is indeed least-squares optimisation.
 
-\section{}
+\paragraph{Finding a solution} by differentiation
+\begin{align}
+	-2\sum _{i}r_{i}{\frac  {\partial f(x_{i},{\boldsymbol  W })}{\partial W _{j}}}=0,\ j=1,\ldots ,m,
+\end{align}
+for parameters $W_j$.
 
+\paragraph{NN Triple Junction}
+For the triple junction we need at least 3 linear functions.
+I would argue at least 2 layers, one to divide in two subsets, and one additional do divide into the third?
 
+\section{Implementing a simple Classification Example}
+I converted the target into one-hot vectors since neural networks tend to be more efficient when one encodes each output neuron to one output.
+Mathematically one could also encode two multiple labels into one output neuron.
+However then I ran into some difficulties with decision boundary visulisation.
+\paragraph{Network Architecture} I used a deeper but with fewer neurons per layer network in the first case, and a two layer network in the latter.
+The former features tanh activation function, the latter Relu.
+Since I converted into one-hot, a softmax is applied in the last step in order to get probabilities in the range from 0 to 1.
 
+\paragraph{Loss Function} I used MultiLabelSoftMarginloss which should be the apropriate for multilabel classification.
+If I were not to convert to one-hot vector, MSE-loss would be probably possible as well.
+
+\paragraph{Optimiser} SGD which is apropriate for mini-batch. However since I used my own data loader and I ran into time issues what I did is not really mini-batch... .
+\includepdf[pages=-]{spiral.pdf}
+\includepdf[pages=-]{triple_junction.pdf}
+
+\section{CNN for MNIST}
+Confusion matrix on test set.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=.8\textwidth]{confusionMat}
+	% \caption{$jkl$ }
+	\label{gauss1}
+\end{figure}
 
 
 \FloatBarrier
@@ -64,11 +107,7 @@ A probably faster converging reward function in this case would be 100 for a ses
 \section{Appendix: Python Source Code}
 \label{sec:app}
 
-\subsection{Testing minimax}
-\label{sub:testing}
-\lstinputlisting[language=Python]{test_board.py}
-
-\subsection{Code}
-\lstinputlisting[language=Python]{tictactoe.py}
+\subsection{CNN Code}
+\lstinputlisting[language=Python]{cnn.py}
 
 \end{document}
