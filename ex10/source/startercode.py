@@ -72,6 +72,7 @@ def reparameterize(self, mu, logvar):
     else:
         return mu
 
+
 # VAE Loss
 #
 # recon_x: image reconstructions
