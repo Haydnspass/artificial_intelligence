@@ -21,6 +21,7 @@ class Args:
         self.no_cuda = False
         self.seed = np.random.randint(32000)
         self.log_interval = 100
+
         
 def train(epoch, lossfunction, args):
     model.train()
@@ -44,7 +45,6 @@ def train(epoch, lossfunction, args):
                 100. * batch_idx / len(train_loader), loss.data[0]))
                 
     return loss.data[0]
-        
 
     
 if __name__ == '__main__':
@@ -82,4 +82,4 @@ if __name__ == '__main__':
     for epoch in range(1, args.epochs + 1):
         train_evo.append(train(epoch, criterion, args))
         
-        torch.save(model.state_dict, 'network_epoch_{}.pth'.format(epoch))
+        torch.save(model.state_dict, 'state_dict/network_epoch_{}.pth'.format(epoch))
