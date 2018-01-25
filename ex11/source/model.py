@@ -14,12 +14,8 @@ class Generator(nn.Module):
         self.input_dim = input_dim
         self.output_dim = output_dim
 
-        self.generator = nn.Sequential(
-            nn.Linear(self.input_dim, 128),
-            nn.ReLU(),
-            nn.Linear(self.output_dim, 784),
-            nn.Sigmoid()
-        )
+        self.fc1 = nn.Linear(self.input_dim, 128)
+        self.fc2 = nn.Linear(128, self.output_dim)
 
     def weights_init(self, mu=0, sig=0.075):
         for m in self._modules:
@@ -28,9 +24,14 @@ class Generator(nn.Module):
                 m.bias.data.normal_(mu, sig**2)
 
     def forward(self, z):
-        z = z.view(-1)
+        z = z.view(z.size(0),-1)
 
-        return self.generator(z)
+        z = self.fc1(z)
+        z = F.relu(z)
+        z = self.fc2(z)
+        z = F.sigmoid(z)
+
+        return z
 
 
 class Discriminator(nn.Module):
@@ -41,12 +42,10 @@ class Discriminator(nn.Module):
         self.input_dim = input_dim
         self.output_dim = output_dim
 
-        self.discriminator = nn.Sequential(
-            nn.Linear(self.input_dim, 128),
-            nn.ReLU(),
-            nn.Linear(128, self.output_dim),
-            nn.Sigmoid()
-        )
+
+        self.fc1 = nn.Linear(self.input_dim, 128)
+        self.fc2 = nn.Linear(128, self.output_dim)
+
 
     def weights_init(self, mu=0, sig=0.075):
         for m in self._modules:
@@ -55,6 +54,11 @@ class Discriminator(nn.Module):
                 m.bias.data.normal_(mu, sig**2)
 
     def forward(self, x):
-        x = x.view(-1)
+        x = x.view(x.size(0),-1)
 
-        return self.discriminator(x)
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.sigmoid(x)
+
+        return x
